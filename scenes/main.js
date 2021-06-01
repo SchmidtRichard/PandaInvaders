@@ -1,3 +1,9 @@
+  //Set the move speed
+  const MOVE_SPEED = 150
+
+  //Layer
+  layer("obj", "ui", "obj")
+
 //Add a level to the game - the first argument is the map and the second one the object (config)
 addLevel([
   "!           p  p  p  p  p           &",
@@ -26,9 +32,6 @@ const player = add([
   origin("center")
   ])
 
-  //Set the move speed
-  const MOVE_SPEED = 150
-
   //Assign keystrokes to the player
   keyDown("left", () => {
     player.move(-MOVE_SPEED, 0)
@@ -37,3 +40,15 @@ const player = add([
   keyDown("right", () => {
     player.move(MOVE_SPEED, 0)
   })
+
+  //Add the score to the game
+  const score = add([
+    text("0"),
+    pos(35, 10),
+    layer("ui"),
+    scale(3),
+    {
+      //Set the score to start with zero
+      value: 0,
+    }
+  ])
