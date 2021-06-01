@@ -38,6 +38,15 @@ kaboom({
 loadSprite("golfinho", "sprites/golfinho.png");
 loadSprite("panda-evil", "sprites/panda-evil.jpg");
 loadKbmsprite("wall", "sprites/wall.kbmsprite");
+scene("lose", (args = {}) => {
+add([
+  //args is anything we pass through this scene
+  text(args.score),
+  origin("center"),
+  scale(10),
+  pos(width()/2, height()/2)
+])
+});
 scene("main", (args = {}) => {
   //Set the move speed
   const MOVE_SPEED = 150
@@ -94,7 +103,7 @@ const player = add([
     }
   ])
 
-  const TIME_LEFT = 14
+  const TIME_LEFT = 150
 
   //Add the timer
   const timer = add([
@@ -107,12 +116,17 @@ const player = add([
     },
   ])
 
-  //Make the timer count down
+//Make the timer count down
 timer.action(() => {
   //dt (delta time) since last frame
   timer.time -= dt()
   timer.text = timer.time.toFixed(2)
 
+  //What happens if we ran out of time
+  if(timer.time <= 0){
+    //Go to the lose scene and bring the score
+    go("lose");
+  }
 })
 
 });

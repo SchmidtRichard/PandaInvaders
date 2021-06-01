@@ -53,7 +53,7 @@ const player = add([
     }
   ])
 
-  const TIME_LEFT = 14
+  const TIME_LEFT = 150
 
   //Add the timer
   const timer = add([
@@ -66,7 +66,7 @@ const player = add([
     },
   ])
 
-  //Make the timer count down
+//Make the timer count down
 timer.action(() => {
   //dt (delta time) since last frame
   timer.time -= dt()
