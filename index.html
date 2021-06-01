@@ -48,8 +48,11 @@ add([
 ])
 });
 scene("main", (args = {}) => {
-  //Set the move speed
-  const MOVE_SPEED = 150
+//Set the move speed
+const MOVE_SPEED = 150
+const INVADER_SPEED = 500
+let CURRENT_SPEED = INVADER_SPEED
+const LEVEL_DOWN = 325
 
   //Layer
   layer(["obj", "ui"], "obj")
@@ -128,6 +131,23 @@ const player = add([
     player.move(MOVE_SPEED, 0)
   })
 
+  //function to spawn bullets
+  function spawnBullet(g) {
+    add([
+      rect(6,18), 
+      pos(g), 
+      origin("center"), 
+      color(0.5, 0.5, 1), 
+      "bullet"
+    ])
+  }
+
+  //Spawning bullets
+  keyPress("space", () => {
+    //pass the player position
+    spawnBullet(player.pos.add(0, -25))
+  })
+
   //Add the score to the game
   const score = add([
     text("0"),
@@ -162,13 +182,9 @@ timer.action(() => {
   //What happens if we ran out of time
   if(timer.time <= 0){
     //Go to the lose scene and bring the score
-    go("lose");
+    go("lose", { score: score.value });
   }
 })
-
-const INVADER_SPEED = 500
-let CURRENT_SPEED = INVADER_SPEED
-const LEVEL_DOWN = 325
 
 //Get the Panda Evil moving right and left
 action("panda-evil", (p) => {
@@ -197,13 +213,12 @@ player.overlaps("panda-evil", () => {
 
 //if the evil panda goes too LEVEL_DOWN
 action("panda-evil", (p) => {
-  // if(p.pos.y >= height()/2){
-  if(p.pos.y >= (12 * 22)){
+  if(p.pos.y >= height()/2){
     go("lose", {score: score.value})
   }
 })
 
-//Spawning bullets
+
 });
 start("main");
 

@@ -81,6 +81,23 @@ const player = add([
     player.move(MOVE_SPEED, 0)
   })
 
+  //function to spawn bullets
+  function spawnBullet(g) {
+    add([
+      rect(6,18), 
+      pos(g), 
+      origin("center"), 
+      color(0.5, 0.5, 1), 
+      "bullet"
+    ])
+  }
+
+  //Spawning bullets
+  keyPress("space", () => {
+    //pass the player position
+    spawnBullet(player.pos.add(0, -25))
+  })
+
   //Add the score to the game
   const score = add([
     text("0"),
@@ -115,7 +132,7 @@ timer.action(() => {
   //What happens if we ran out of time
   if(timer.time <= 0){
     //Go to the lose scene and bring the score
-    go("lose");
+    go("lose", { score: score.value });
   }
 })
 
@@ -151,4 +168,3 @@ action("panda-evil", (p) => {
   }
 })
 
-//Spawning bullets
