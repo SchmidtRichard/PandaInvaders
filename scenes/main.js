@@ -52,3 +52,29 @@ const player = add([
       value: 0,
     }
   ])
+
+  const TIME_LEFT = 14
+
+  //Add the timer
+  const timer = add([
+    text("0"),
+    pos(65, 15),
+    layer("ui"),
+    scale(2),    
+    {
+      time: TIME_LEFT,
+    },
+  ])
+
+  //Make the timer count down
+timer.action(() => {
+  //dt (delta time) since last frame
+  timer.time -= dt()
+  timer.text = timer.time.toFixed(2)
+
+  //What happens if we ran out of time
+  if(timer.time <= 0){
+    //Go to the lose scene and bring the score
+    go("lose");
+  }
+})
