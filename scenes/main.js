@@ -21,5 +21,19 @@ addLevel([
 
 //Add the player
 const player = add([
-  sprite("golfinho")
+  sprite("golfinho"), scale(0.1),
+  pos(width() / 2, height() / 2),
+  origin("center")
   ])
+
+  //Set the move speed
+  const MOVE_SPEED = 150
+
+  //Assign keystrokes to the player
+  keyDown("left", () => {
+    player.move(-MOVE_SPEED, 0)
+  })
+
+  keyDown("right", () => {
+    player.move(MOVE_SPEED, 0)
+  })
