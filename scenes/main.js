@@ -1,8 +1,10 @@
 //Set the move speed
 const MOVE_SPEED = 150
-const INVADER_SPEED = 500
+const INVADER_SPEED = 300
 let CURRENT_SPEED = INVADER_SPEED
-const LEVEL_DOWN = 325
+const LEVEL_DOWN = 425
+const TIME_LEFT = 150
+const BULLET_SPEED = 300
 
   //Layer
   layer(["obj", "ui"], "obj")
@@ -70,58 +72,76 @@ const player = add([
   pos(width() / 2, height() / 2),
   // origin("center")
   pos(900, 1000)
+])
+
+//Assign keystrokes to the player
+keyDown("left", () => {
+  player.move(-MOVE_SPEED, 0)
+})
+
+keyDown("right", () => {
+  player.move(MOVE_SPEED, 0)
+})
+
+//function to spawn bullets
+function spawnBullet(g) {
+  add([
+    rect(6,18), 
+    pos(g), 
+    origin("center"), 
+    color(0.5, 0.5, 1), 
+    "bullet"
   ])
+}
 
-  //Assign keystrokes to the player
-  keyDown("left", () => {
-    player.move(-MOVE_SPEED, 0)
-  })
+//Spawning bullets
+keyPress("space", () => {
+  //pass the player position
+  spawnBullet(player.pos.add(0, -25))
+})
 
-  keyDown("right", () => {
-    player.move(MOVE_SPEED, 0)
-  })
-
-  //function to spawn bullets
-  function spawnBullet(g) {
-    add([
-      rect(6,18), 
-      pos(g), 
-      origin("center"), 
-      color(0.5, 0.5, 1), 
-      "bullet"
-    ])
+//Make the bullets move
+action("bullet", (b) => {
+  b.move(0, -BULLET_SPEED)
+  //Destroy the bullet
+  if(b.pos.y < 0){
+    destroy(b)
   }
+})
 
-  //Spawning bullets
-  keyPress("space", () => {
-    //pass the player position
-    spawnBullet(player.pos.add(0, -25))
-  })
+collides("bullet", "panda-evil", (b, p) => {
+  //Shake the camera
+  camShake(4)
+  destroy(b)
+  destroy(p)
+  //add 1 to the score
+  score.value++
+  //show the score value
+  score.text = score.value
+})
 
-  //Add the score to the game
-  const score = add([
-    text("0"),
-    pos(35, 10),
-    layer("ui"),
-    scale(3),
-    {
-      //Set the score to start with zero
-      value: 0,
-    }
-  ])
+//Add the score to the game
+const score = add([
+  text("0"),
+  pos(35, 10),
+  layer("ui"),
+  scale(3),
+  {
+    //Set the score to start with zero
+    value: 0,
+  }
+])
 
-  const TIME_LEFT = 150
-
-  //Add the timer
-  const timer = add([
-    text("0"),
-    pos(65, 15),
-    layer("ui"),
-    scale(2),    
-    {
-      time: TIME_LEFT,
-    },
-  ])
+//Add the timer
+ const timer = add([
+  text("0"),
+  pos(95, 15),
+  layer("ui"),
+  scale(2),    
+  {
+    time: TIME_LEFT,
+  },
+])
 
 //Make the timer count down
 timer.action(() => {
